@@ -1,0 +1,22 @@
+A simple and lightwight (2k gzipped) (almost) drop in replacement for some of the more used jQuery methods written in modern vanilla JavaScript using native DOM API:
+
+- addClass
+- each
+- click
+- eq
+- filter
+- find
+- first
+- focus
+- get
+- last
+- off
+- on
+- next
+- nextAll
+- prev
+- prevAll
+- removeClass
+- siblings
+- toggleClass
+- trigger
