@@ -4,7 +4,7 @@ const vjQuery = {
     elements: [],    
     length: 0,
     _init: function(elements) {
-        if (elements.length !== undefined) {
+        if (elements && elements.length !== undefined) {
             elements = [].slice.call(elements);
         }
         this.elements = [].concat(elements);
@@ -58,28 +58,50 @@ const vjQuery = {
     filter: function(cb) {
         return renew(this.elements.filter(cb));
     },
-    on: function() {
-        const events = arguments[0];
-        const filterSelector = typeof arguments[1] === 'string' ? arguments[1] : null;
-        const cb = typeof arguments[1] === 'string' ? arguments[2] : arguments[1];
+    map: function(cb) {
+        return renew(this.elements.map(cb));
+    },
+    toArray: function() {
+        return this.elements;
+    },
+    _on: function() {
+        const removeAfterFire = arguments[0]
+        const events = arguments[1];
+        const filterSelector = typeof arguments[2] === 'string' ? arguments[2] : null;
+        const cb = typeof arguments[2] === 'string' ? arguments[3] : arguments[2];
         const eventsList = events.split(' ');
         this.elements.forEach((el) => eventsList.forEach((eventName) => {
             el.addEventListener(eventName, (e) => {
                 if (!filterSelector) {
+                    if (removeAfterFire) {
+                        el.removeEventListener(eventName);
+                    }
                     cb(e);
                     return;
                 }
 
                 const filterElements = [].slice.call(document.querySelectorAll(filterSelector));
                 if (filterElements.some((element) => element === e.orignalTarget)) {
+                    if (removeAfterFire) {
+                        el.removeEventListener(eventName);
+                    }
                     cb(e);
                 }
             });
         }));
+    },
+    on: function() {
+        this._on(false, ...arguments);
 
         return this;
     },
+    one: function() {
+        this._on(true, ...arguments);
+        
+        return this;
+    },
     off: function(events) {
+        //TODO: add events namespace
         const eventsList = events.split(' ');
         this.elements.forEach((el) => eventsList.forEach((event) => {
             el.removeEventListener(eventName, cb);
@@ -136,10 +158,14 @@ const vjQuery = {
         var currentElHit = false;
         var i=0;
         while (siblings.length && !currentElHit) {
-            if (i === siblings.length - 1 || siblings[i] === this.elements[0] || siblings[i].compareDocumentPosition(this.elements[0]) === 2) {
+            if (i === siblings.length || siblings[i].compareDocumentPosition(this.elements[0]) === 2) {
                 currentElHit = true;
-            }
+            } else if (siblings[i] === this.elements[0]) {            
+                currentElHit = true;                
+                i++;
+            } else {
             i++;
+            }
         }
         return {
             siblings,
@@ -161,7 +187,7 @@ const vjQuery = {
             return this;
         }
         const {siblings, currentElPos} = this._getSiblingsAndCurrentElPos(selector);        
-        var nextAll = [].slice.call(siblings, currentElPos + 1);
+        var nextAll = [].slice.call(siblings, currentElPos);
         
         return renew(nextAll);
     },

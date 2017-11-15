@@ -1,0 +1,22 @@
+{
+  "name": "vjquery",
+  "version": "1.0.0",
+  "description": "A simple and lightwight (2k gzipped) (almost) drop in replacement for some of the more used jQuery methods written in modern vanilla JavaScript using native DOM API:",
+  "main": "vjQuery.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fbedussi/vjQuery.git"
+  },
+  "author": "Francesco Bedussi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fbedussi/vjQuery/issues"
+  },
+  "homepage": "https://github.com/fbedussi/vjQuery#readme",
+  "devDependencies": {
+    "jest": "^21.2.1"
+  }
+}
